@@ -1,0 +1,110 @@
+
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+from matplotlib.colors import LinearSegmentedColormap
+
+# Loading csv data into a dataframe
+happiness = pd.read_csv('world_happiness.csv')
+
+
+# correlation between social_support and happiness score
+social_support_correlation = happiness['social_support'].corr(happiness['happiness_score']).round(2)
+
+print('social support correlation' + ' = ' + str(social_support_correlation))
+
+# correlation between freedom and happiness score
+freedom_correlation = happiness['freedom'].corr(happiness['happiness_score']).round(2)
+
+print('freedom_correlation' + ' = ' + str(freedom_correlation))
+
+# correlation between corruption and happiness score
+corruption_correlation = happiness['corruption'].corr(happiness['happiness_score']).round(2)
+print('corruption_correlation' + ' = ' + str(corruption_correlation))
+
+# correlation between generosity and happiness score
+generosity_correlation = happiness['generosity'].corr(happiness['happiness_score']).round(2)
+
+print('generosity_correlation' + ' = ' + str(generosity_correlation))
+
+# correlation between gdp per capita expectancy and happiness score
+gdp_per_cap_correlation = happiness['gdp_per_cap'].corr(happiness['happiness_score']).round(2)
+
+print('gdp_per_cap_correlation' + ' = ' + str(gdp_per_cap_correlation))
+
+# correlation between life expectancy and happiness score
+life_exp_correlation = happiness['life_exp'].corr(happiness['happiness_score']).round(2)
+
+print('life_exp_correlation' + ' = ' + str(life_exp_correlation))
+
+
+# Create a diverging colormap
+green = (0, 1, 0)  # RGB for green
+red = (1, 0, 0)    # RGB for red
+neutral = (0.5, 0.5, 0.5)  # RGB for a neutral gray
+my_palette = LinearSegmentedColormap.from_list('green_to_red', [red, neutral, green], N=10)
+
+# Drop missing values
+happiness = happiness.dropna()
+
+# Normalizing the happiness_score
+happiness['happiness_score_norm'] = (happiness['happiness_score'] - happiness['happiness_score'].min()) / (happiness['happiness_score'].max() - happiness['happiness_score'].min())
+
+# Mapping colors based on normalized happiness_score
+colors = [my_palette(i) for i in happiness['happiness_score_norm']]
+
+
+
+# Creating a scatterplot of happiness_score vs social_support
+sns.regplot(x='social_support', y='happiness_score', data=happiness,
+            scatter_kws={"color": colors}, line_kws={"color": "black"},
+            ci=None)  
+
+plt.xlabel('Social Support Rank')
+plt.title('Social Support vs Happiness(r = -0.82)')
+plt.show()
+
+# Creating a scatterplot of happiness_score vs social_support
+sns.regplot(x='freedom', y='happiness_score', data=happiness,
+            scatter_kws={"color": colors}, line_kws={"color": "black"},  
+            ci=None)  
+
+plt.xlabel('Freedom Rank')
+plt.title('Freedom vs Happiness(r = -0.57)')
+plt.show()
+
+# Creating a scatterplot of happiness_score vs corruption
+sns.regplot(x='corruption', y='happiness_score', data=happiness,
+            scatter_kws={"color": colors}, line_kws={"color": "black"},  
+            ci=None)  
+
+plt.xlabel('Corruption Rank')
+plt.title('Corruption vs Happiness(r = -0.22)')
+plt.show()
+
+# Creating a scatterplot of happiness_score vs generosity
+sns.regplot(x='generosity', y='happiness_score', data=happiness,
+            scatter_kws={"color": colors}, line_kws={"color": "black"},  
+            ci=None)  
+
+plt.xlabel('Generosity Rank')
+plt.title('Generosity vs Happiness(r = -0.5)')
+plt.show()
+
+# Creating a scatterplot of happiness_score vs GDP per capita
+sns.regplot(x='gdp_per_cap', y='happiness_score', data=happiness,
+            scatter_kws={"color": colors}, line_kws={"color": "black"},  
+            ci=None)  
+
+plt.xlabel('GDP Per Capita')
+plt.title('GDP vs Happiness(r = 0.73)')
+plt.show()
+
+# Creating a scatterplot of happiness_score vs Life Expectancy
+sns.regplot(x='life_exp', y='happiness_score', data=happiness,
+            scatter_kws={"color": colors}, line_kws={"color": "black"},  
+            ci=None)  
+
+plt.xlabel('Life Expectancy')
+plt.title('Life Expectancy vs Happiness(r = 0.78)')
+plt.show()
